@@ -12,7 +12,7 @@
     <aside class="sidebar">
         <div class="top-nav">
             <div class="logo-icon">✶</div>
-            <button class="new-btn">+ New</button>
+            <button class="new-btn" onclick="clearSearch()">+ New</button>
             <nav class="nav-links">
                 <a href="#" class="active">💻 Computer</a>
                 <a href="#">📁 Spaces</a>
@@ -34,11 +34,11 @@
     <main class="main-content">
         <!-- Top Nav Filter Categories -->
         <header class="top-filters">
-            <a href="#">Discover</a>
-            <a href="#">Finance</a>
-            <a href="#">Health</a>
-            <a href="#">Academic</a>
-            <a href="#">Patents</a>
+            <a href="#" onclick="filterSearch('Discover')">Discover</a>
+            <a href="#" onclick="filterSearch('Finance')">Finance</a>
+            <a href="#" onclick="filterSearch('Health')">Health</a>
+            <a href="#" onclick="filterSearch('Academic')">Academic</a>
+            <a href="#" onclick="filterSearch('Patents')">Patents</a>
         </header>
 
         <!-- Center Search Interface Content -->
@@ -46,28 +46,30 @@
             <h1 class="brand-title">Roohith browser</h1>
             
             <div class="search-box-wrapper">
-                <input type="text" class="search-input" placeholder="ask anything">
+                <!-- Text input catches Enter key presses -->
+                <input type="text" id="searchQuery" class="search-input" placeholder="ask anything" onkeydown="handleSearch(event)">
                 <div class="search-controls">
                     <div class="left-controls">
                         <button class="control-btn">+</button>
-                        <button class="control-btn pill">🔍 Search ▾</button>
+                        <button class="control-btn pill" onclick="executeSearch()">🔍 Search ▾</button>
                         <button class="control-btn pill">💻 Computer</button>
                     </div>
                     <div class="right-controls">
                         <button class="control-btn text-btn">Model ▾</button>
                         <button class="control-btn">🎙️</button>
-                        <button class="control-btn wave-btn">〰️</button>
+                        <!-- Wave button executes search when clicked -->
+                        <button class="control-btn wave-btn" onclick="executeSearch()">〰️</button>
                     </div>
                 </div>
             </div>
 
             <!-- Action Highlight Promo Cards -->
             <div class="cards-grid">
-                <div class="card teal-card">
+                <div class="card teal-card" onclick="cardSearch('Search anything')">
                     <h3>🔍 Search anything</h3>
                     <p>Get fast, private and accurate answers from the most trusted sources.</p>
                 </div>
-                <div class="card dark-card">
+                <div class="card dark-card" onclick="cardSearch('Get work done with Computer')">
                     <h3>💻 Get work done with Computer <span class="badge">NEW</span></h3>
                     <p>Hand off your projects to get polished, reliable deliverables around the clock.</p>
                 </div>
@@ -75,5 +77,41 @@
         </section>
     </main>
 
+    <!-- Functional Engine Script -->
+    <script>
+        // Listens for user pressing the Enter key inside the text bar
+        function handleSearch(event) {
+            if (event.key === "Enter") {
+                executeSearch();
+            }
+        }
+
+        // Extracts the query text and routes securely to private engine results
+        function executeSearch() {
+            const query = document.getElementById("searchQuery").value;
+            if (query.trim() !== "") {
+                // Opens private results securely inside a fresh browser window
+                window.location.href = `https://duckduckgo.com{encodeURIComponent(query)}`;
+            }
+        }
+
+        // Automatically executes queries when feature blocks are clicked
+        function cardSearch(text) {
+            document.getElementById("searchQuery").value = text;
+            executeSearch();
+        }
+
+        // Routes category menu option clicks into custom targeted searches
+        function filterSearch(category) {
+            document.getElementById("searchQuery").value = category;
+            executeSearch();
+        }
+
+        // Resets text bar clean when "+ New" layout option button gets clicked
+        function clearSearch() {
+            document.getElementById("searchQuery").value = "";
+            document.getElementById("searchQuery").focus();
+        }
+    </script>
 </body>
 </html>
